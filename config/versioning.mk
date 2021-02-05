@@ -19,23 +19,27 @@ else
     BUILD_DATE := $(shell date +%Y%m%d)
 endif
 
-TARGET_PRODUCT_SHORT := $(subst derp_,,$(DERP_BUILDTYPE))
-
-DERP_BUILDTYPE ?= Community
+TARGET_PRODUCT_SHORT := $(subst synth_,,$(SYNTH_BUILDTYPE))
 DERP_BUILD_VERSION := $(PLATFORM_VERSION)
-DERP_VERSION := $(DERP_BUILD_VERSION)-$(DERP_BUILDTYPE)-Beta-$(DERP_BUILD)-$(BUILD_DATE)
-ROM_FINGERPRINT := DerpFest/$(PLATFORM_VERSION)/$(TARGET_PRODUCT_SHORT)/$(shell date -u +%H%M)
 
-ifeq ($(DERP_BUILDTYPE), CI)
+SYNTH_BUILDTYPE ?= Community
+SYNTH_VERSION_PRODUCT := Resonance
+SYNTH_VERSION_MODEL := 2.0-Alpha
+SYNTH_VERSION := $(SYNTH_VERSION_PRODUCT)-$(SYNTH_VERSION_MODEL)-$(SYNTH_BUILDTYPE)-$(DERP_BUILD)-$(BUILD_DATE)
+ROM_FINGERPRINT := Synth/$(SYNTH_VERSION_PRODUCT)/$(SYNTH_VERSION_MODEL)/$(TARGET_PRODUCT_SHORT)/$(shell date -u +%H%M)
+
+ifeq ($(SYNTH_BUILDTYPE), CI)
     BUILD_KEYS := release-keys
 endif
 
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
   ro.derp.build.version=$(DERP_BUILD_VERSION) \
   ro.derp.build.date=$(BUILD_DATE) \
-  ro.derp.buildtype=$(DERP_BUILDTYPE) \
-  ro.derp.fingerprint=$(ROM_FINGERPRINT) \
-  ro.derp.version=$(DERP_VERSION) \
+  ro.synth.buildtype=$(SYNTH_BUILDTYPE) \
+  ro.synth.fingerprint=$(ROM_FINGERPRINT) \
+  ro.synth.version.product=$(SYNTH_VERSION_PRODUCT) \
+  ro.synth.version.model=$(SYNTH_VERSION_MODEL) \
+  ro.synth.version=$(SYNTH_VERSION) \
   ro.derp.device=$(DERP_BUILD) \
   ro.modversion=$(DERP_VERSION)
 
