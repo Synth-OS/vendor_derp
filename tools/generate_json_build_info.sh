@@ -9,7 +9,7 @@ if [ "$1" ]; then
     device_name=$(echo $file_name | cut -d "-" -f 4)
     buildprop=out/target/product/$device_name/system/build.prop
     if [ -f $file_path ]; then
-        if [[ $file_name == *"Official"* ]]; then # only generate for official builds
+        if [[ $file_name == *"Synthetic"* ]]; then # only generate for official builds
             file_size=$(stat -c%s $file_path)
             sha256=$(cat "$file_path.sha256sum" | cut -d' ' -f1)
             datetime=$(grep ro\.build\.date\.utc $buildprop | cut -d= -f2)
@@ -19,12 +19,14 @@ if [ "$1" ]; then
             echo "  \"response\": [" >> $file_path.json
             echo "    {" >> $file_path.json
             echo "     \"datetime\": ${datetime}," >> $file_path.json
-            echo "     \"filename\": \"${file_name}\"," >> $file_path.json
-            echo "     \"id\": \"${id}\"," >> $file_path.json
-            echo "     \"romtype\": \"Official\"," >> $file_path.json
+            echo "     \"filename\": \"${file_name}\"" >> $file_path.json
+            echo "     \"id\": \"${id}\"" >> $file_path.json
+            echo "     \"romtype\": \"Synthetic\"" >> $file_path.json
             echo "     \"size\": ${file_size}," >> $file_path.json
             echo "     \"url\": \"${link}\"," >> $file_path.json
             echo "     \"version\": \"11\"" >> $file_path.json
+            echo "     \"product\": \"${SYNTH_VERSION_PRODUCT}\"" >> $file_path.json
+            echo "     \"model\": \"${SYNTH_VERSION_MODEL}\"" >> $file_path.json
             echo "    }" >> $file_path.json
             echo "  ]" >> $file_path.json
             echo "}" >> $file_path.json
